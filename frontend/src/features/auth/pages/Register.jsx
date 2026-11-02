@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -10,17 +11,17 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
 
+  const {handleRegister} = useAuth()
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((currentFormData) => ({ ...currentFormData, [name]: value }));
     setSubmitMessage("");
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    setSubmitMessage(
-      "Authentication isn't connected yet. Your details haven't been sent.",
-    );
+    await handleRegister(formData)
   };
 
   return (

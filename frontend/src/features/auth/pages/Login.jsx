@@ -1,10 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate,Navigate } from "react-router";
+import { useSelector } from "react-redux";
+
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+
+  const navigate = useNavigate();
+  const { handleLogin } = useAuth();
+
+  const user = useSelector((state) => state.auth.user);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -12,11 +21,15 @@ const Login = () => {
     setSubmitMessage("");
   };
 
-  const handleFormSubmit = (event) => {
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
+
+
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    setSubmitMessage(
-      "Authentication isn't connected yet. Your details haven't been sent.",
-    );
+    await handleLogin(formData);
+    navigate("/"); // Redirect to the dashboard after successful login
   };
 
   return (
@@ -52,7 +65,9 @@ const Login = () => {
                 />
               </svg>
             </span>
-            <span className="text-lg font-semibold tracking-tight">Perplexity</span>
+            <span className="text-lg font-semibold tracking-tight">
+              Perplexity
+            </span>
           </Link>
 
           <div className="max-w-md pb-4">
@@ -92,9 +107,7 @@ const Login = () => {
             </p>
           </div>
 
-          <p className="text-xs text-slate-600">
-            Ask more. Understand more.
-          </p>
+          <p className="text-xs text-slate-600">Ask more. Understand more.</p>
         </div>
 
         <div className="flex items-center justify-center px-6 py-10 sm:px-12 md:px-10 lg:px-14">
@@ -192,7 +205,9 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword((visible) => !visible)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                     aria-pressed={showPassword}
                     className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-slate-500 transition hover:text-slate-200"
                   >
