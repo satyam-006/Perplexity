@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+import { Navigate,useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +13,17 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
 
-  const {handleRegister} = useAuth()
+  const navigate = useNavigate();
+
+  const { handleRegister } = useAuth();
+
+  const { user,loading } = useSelector((state) => state.auth);
+
+  console.log(user)
+
+  if (user) {
+    return <Navigate to={"/"} replace />;
+  }
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -21,8 +33,13 @@ const Register = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    await handleRegister(formData)
+    await handleRegister(formData);
+    navigate("/verify-email");
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#090b0f] px-4 py-12 text-white selection:bg-teal-300/30">
@@ -57,7 +74,9 @@ const Register = () => {
                 />
               </svg>
             </span>
-            <span className="text-lg font-semibold tracking-tight">Perplexity</span>
+            <span className="text-lg font-semibold tracking-tight">
+              Perplexity
+            </span>
           </Link>
 
           <div className="max-w-md pb-4">
@@ -97,9 +116,7 @@ const Register = () => {
             </p>
           </div>
 
-          <p className="text-xs text-slate-600">
-            Ask more. Understand more.
-          </p>
+          <p className="text-xs text-slate-600">Ask more. Understand more.</p>
         </div>
 
         <div className="flex items-center justify-center px-6 py-10 sm:px-12 md:px-10 lg:px-14">
@@ -204,7 +221,9 @@ const Register = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword((visible) => !visible)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                     aria-pressed={showPassword}
                     className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-slate-500 transition hover:text-slate-200"
                   >
