@@ -281,8 +281,33 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen min-h-[560px] overflow-hidden bg-[#0b0d11] text-slate-100 selection:bg-teal-300/30">
       <style>{`
-        @keyframes chat-gradient-spin {
-          to { transform: rotate(360deg); }
+        @property --composer-rotate {
+          syntax: "<angle>";
+          initial-value: 0deg;
+          inherits: false;
+        }
+        @keyframes composer-border-rotate {
+          from { --composer-rotate: 0deg; }
+          to { --composer-rotate: 360deg; }
+        }
+        .composer-frame {
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          animation: composer-border-rotate 2.5s linear infinite paused;
+          transition: border-color 0.2s ease;
+        }
+        .composer-frame-generating {
+          border-color: transparent;
+          background:
+            linear-gradient(#13161b, #13161b) padding-box,
+            conic-gradient(
+              from var(--composer-rotate),
+              #123f3c,
+              #36d8bf,
+              #4565c8,
+              #b27bde,
+              #123f3c
+            ) border-box;
+          animation-play-state: running;
         }
       `}</style>
 
@@ -628,21 +653,11 @@ const Dashboard = () => {
           <div className="mx-auto max-w-[780px]">
             <form
               onSubmit={sendMessage}
-              className="relative rounded-[26px] p-px"
+              className={`composer-frame relative rounded-[26px] ${
+                isGenerating ? "composer-frame-generating" : ""
+              }`}
             >
-              <div
-                aria-hidden="true"
-                className="absolute -inset-px overflow-hidden rounded-[27px] transition-opacity duration-300"
-                style={{
-                  opacity: isGenerating ? 1 : 0,
-                  background:
-                    "conic-gradient(from 0deg, #123f3c, #36d8bf, #4565c8, #b27bde, #123f3c)",
-                  animation: isGenerating
-                    ? "chat-gradient-spin 2.5s linear infinite"
-                    : "none",
-                }}
-              />
-              <div className="relative rounded-[25px] border border-white/[0.09] bg-[#13161b] shadow-[0_12px_60px_-28px_rgba(0,0,0,0.9)]">
+              <div className="relative rounded-[25px] bg-[#13161b] shadow-[0_12px_60px_-28px_rgba(0,0,0,0.9)]">
                 <textarea
                   aria-label="Message the AI"
                   value={message}
