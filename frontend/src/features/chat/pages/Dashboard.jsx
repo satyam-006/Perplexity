@@ -291,9 +291,13 @@ const Dashboard = () => {
           to { --composer-rotate: 360deg; }
         }
         .composer-frame {
-          border: 1px solid rgba(255, 255, 255, 0.09);
+          border: 1.5px solid rgba(255, 255, 255, 0.09);
           animation: composer-border-rotate 2.5s linear infinite paused;
-          transition: border-color 0.2s ease;
+          transition: border-color 0.3s ease;
+        }
+        .composer-frame:focus-within:not(.composer-frame-generating) {
+          border-color: rgba(94, 234, 212, 0.65);
+          
         }
         .composer-frame-generating {
           border-color: transparent;
@@ -301,11 +305,13 @@ const Dashboard = () => {
             linear-gradient(#13161b, #13161b) padding-box,
             conic-gradient(
               from var(--composer-rotate),
+              #13161b,
               #123f3c,
               #36d8bf,
               #4565c8,
               #b27bde,
-              #123f3c
+              #123f3c,
+              #13161b
             ) border-box;
           animation-play-state: running;
         }
