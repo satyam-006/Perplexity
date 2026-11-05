@@ -5,6 +5,7 @@ import { useNavigate,Navigate } from "react-router";
 import { useSelector } from "react-redux";
 
 
+
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -178,17 +179,12 @@ const Login = () => {
                   >
                     Password
                   </label>
-                  <button
-                    type="button"
+                  <Link
+                    to="/forgot-password"
                     className="text-xs font-medium text-teal-200 transition hover:text-teal-100"
-                    onClick={() =>
-                      setSubmitMessage(
-                        "Password reset isn't available until authentication is connected.",
-                      )
-                    }
                   >
                     Forgot password?
-                  </button>
+                  </Link>
                 </div>
                 <div className="relative">
                   <input

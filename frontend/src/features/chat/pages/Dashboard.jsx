@@ -300,18 +300,18 @@ const Dashboard = () => {
           
         }
         .composer-frame-generating {
-          border-color: transparent;
+          border-color: rgba(94, 234, 212, 0.25);
           background:
             linear-gradient(#13161b, #13161b) padding-box,
             conic-gradient(
               from var(--composer-rotate),
               #13161b,
+              #13161b,
               #123f3c,
               #36d8bf,
               #4565c8,
               #b27bde,
-              #123f3c,
-              #13161b
+              #123f3c
             ) border-box;
           animation-play-state: running;
         }
@@ -323,7 +323,7 @@ const Dashboard = () => {
             <span className="flex size-9 items-center justify-center rounded-xl bg-teal-300 text-[#08110f]">
               <Icon name="sparkle" size={21} />
             </span>
-            <span className="text-[15px] font-semibold tracking-tight max-md:hidden">
+            <span className="text-[17px] font-semibold tracking-tight max-md:hidden">
               Perplexity
             </span>
           </div>
@@ -333,12 +333,12 @@ const Dashboard = () => {
           <button
             type="button"
             onClick={startNewChat}
-            className="flex h-10 w-full items-center gap-2.5 rounded-xl border border-white/[0.09] bg-white/[0.035] px-3 text-sm font-medium text-slate-200 transition hover:border-white/[0.16] hover:bg-white/[0.07] max-md:justify-center max-md:px-0"
+            className="flex h-10 w-full items-center gap-2.5 rounded-xl border border-white/[0.09] bg-white/[0.035] px-3 text-base font-medium text-slate-200 transition hover:border-white/[0.16] hover:bg-white/[0.07] max-md:justify-center max-md:px-0"
           >
             <Icon name="plus" size={17} />
-            <span className="max-md:hidden">New thread</span>
+            <span className="max-md:hidden">New chat</span>
           </button>
-          <label className="mt-3 flex h-10 items-center gap-2.5 rounded-xl px-3 text-sm text-slate-400 transition focus-within:bg-white/[0.05] max-md:hidden">
+          <label className="mt-3 flex h-10 items-center gap-2.5 rounded-xl px-3 text-base text-slate-400 transition focus-within:bg-white/[0.05] max-md:hidden">
             <Icon name="search" size={17} />
             <input
               aria-label="Search conversations"
@@ -348,15 +348,15 @@ const Dashboard = () => {
               placeholder="Search"
               className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-slate-600"
             />
-            <span className="rounded border border-white/[0.08] px-1.5 py-0.5 text-[10px] text-slate-600">
+            <span className="rounded border border-white/[0.08] px-1.5 py-0.5 text-xs text-slate-600">
               /
             </span>
           </label>
         </div>
 
         <div className="mt-7 flex-1 overflow-y-auto px-3 max-md:px-2">
-          <div className="mb-2 px-2 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-600 max-md:hidden">
-            Your threads
+          <div className="mb-2 px-2 text-[13px] font-medium uppercase tracking-[0.14em] text-slate-600 max-md:hidden">
+            Your chats
           </div>
           <div className="space-y-1">
             {filteredChats.map((chat) => (
@@ -368,7 +368,7 @@ const Dashboard = () => {
                   setOpenPopover(null);
                 }}
                 title={chat.title}
-                className={`group flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2.5 text-left text-[13px] transition max-md:justify-center max-md:px-0 ${
+                className={`group flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2.5 text-left text-[15px] transition max-md:justify-center max-md:px-0 ${
                   chat.id === activeChatId
                     ? "bg-white/[0.075] text-slate-100"
                     : "text-slate-400 hover:bg-white/[0.045] hover:text-slate-200"
@@ -382,13 +382,13 @@ const Dashboard = () => {
                 <span className="min-w-0 flex-1 truncate max-md:hidden">
                   {chat.title}
                 </span>
-                <span className="hidden shrink-0 text-[10px] text-slate-600 group-hover:inline max-md:hidden">
+                <span className="hidden shrink-0 text-xs text-slate-600 group-hover:inline max-md:hidden">
                   {chat.time}
                 </span>
               </button>
             ))}
             {filteredChats.length === 0 && (
-              <p className="px-2 py-3 text-xs text-slate-600 max-md:hidden">
+              <p className="px-2 py-3 text-sm text-slate-600 max-md:hidden">
                 No conversations found
               </p>
             )}
@@ -399,7 +399,7 @@ const Dashboard = () => {
           {openPopover === "settings" && (
             <div className="absolute bottom-[calc(100%+8px)] left-3 right-3 rounded-2xl border border-white/[0.1] bg-[#171a20] p-4 shadow-2xl max-md:left-[84px] max-md:right-2">
               <div className="mb-3 flex items-center justify-between">
-                <h2 className="text-sm font-semibold">Settings</h2>
+                <h2 className="text-base font-semibold">Settings</h2>
                 <button
                   type="button"
                   aria-label="Close settings"
@@ -429,20 +429,20 @@ const Dashboard = () => {
                     className="flex w-full items-center justify-between gap-3 rounded-lg py-2 text-left"
                   >
                     <span>
-                      <span className="block text-xs font-medium text-slate-200">
+                      <span className="block text-sm font-medium text-slate-200">
                         {setting.label}
                       </span>
-                      <span className="mt-0.5 block text-[10px] text-slate-500">
+                      <span className="mt-0.5 block text-xs text-slate-500">
                         {setting.description}
                       </span>
                     </span>
                     <span
-                      className={`relative h-5 w-9 shrink-0 rounded-full transition ${
+                      className={`relative h-5 w-9 shrink-0 rounded-full transition-all duration-300 ${
                         settings[setting.key] ? "bg-teal-300" : "bg-slate-700"
                       }`}
                     >
                       <span
-                        className={`absolute top-0.5 size-4 rounded-full bg-white transition ${
+                        className={`absolute top-0.5 size-4 rounded-full bg-white transition-all duration-300 ${
                           settings[setting.key] ? "left-[18px]" : "left-0.5"
                         }`}
                       />
@@ -451,10 +451,10 @@ const Dashboard = () => {
                 ))}
               </div>
               <div className="mt-3 border-t border-white/[0.07] pt-3">
-                <span className="text-[10px] uppercase tracking-wider text-slate-600">
+                <span className="text-xs uppercase tracking-wider text-slate-600">
                   Appearance
                 </span>
-                <div className="mt-2 flex items-center justify-between text-xs text-slate-300">
+                <div className="mt-2 flex items-center justify-between text-sm text-slate-300">
                   <span>Theme</span>
                   <span className="rounded-md bg-white/[0.07] px-2 py-1 text-slate-400">
                     Dark
@@ -467,19 +467,19 @@ const Dashboard = () => {
           {accountMenuOpen && (
             <div className="absolute bottom-[calc(100%+8px)] left-3 right-3 rounded-2xl border border-white/[0.1] bg-[#171a20] p-4 shadow-2xl max-md:left-[84px] max-md:right-2">
               <div className="flex items-center gap-3">
-                <span className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-teal-200 to-cyan-500 text-sm font-semibold text-[#08201d]">
+                <span className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-teal-200 to-cyan-500 text-base font-semibold text-[#08201d]">
                   JD
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-slate-100">
+                  <p className="truncate text-base font-medium text-slate-100">
                     Jordan Davis
                   </p>
-                  <p className="truncate text-xs text-slate-500">
+                  <p className="truncate text-sm text-slate-500">
                     jordan.davis@example.com
                   </p>
                 </div>
               </div>
-              <div className="mt-4 border-t border-white/[0.07] pt-3 text-xs text-slate-500">
+              <div className="mt-4 border-t border-white/[0.07] pt-3 text-sm text-slate-500">
                 Personal account
                 <span className="mt-1 block text-slate-400">
                   Free plan · Dummy profile
@@ -499,7 +499,7 @@ const Dashboard = () => {
               className="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-2.5 py-2 text-left text-slate-400 transition hover:bg-white/[0.05] hover:text-slate-200 max-md:justify-center max-md:px-0"
             >
               <Icon name="settings" size={17} />
-              <span className="text-xs max-md:hidden">Settings</span>
+              <span className="text-sm max-md:hidden">Settings</span>
             </button>
             <button
               type="button"
@@ -514,7 +514,7 @@ const Dashboard = () => {
               <Icon name="user" size={17} />
             </button>
           </div>
-          <div className="mt-1 flex items-center justify-between px-2.5 text-[10px] text-slate-600 max-md:hidden">
+          <div className="mt-1 flex items-center justify-between px-2.5 text-xs text-slate-600 max-md:hidden">
             <span>Jordan Davis</span>
             <span>Free plan</span>
           </div>
@@ -528,16 +528,16 @@ const Dashboard = () => {
               <Icon name="sparkle" size={16} />
             </span>
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-slate-200">
+              <p className="truncate text-base font-medium text-slate-200">
                 {activeChat?.title || "New conversation"}
               </p>
-              <p className="text-[11px] text-slate-600">AI chat</p>
+              <p className="text-[13px] text-slate-600">AI chat</p>
             </div>
           </div>
           <button
             type="button"
             onClick={() => setSettings((current) => ({ ...current, webSearch: !current.webSearch }))}
-            className={`flex h-9 items-center gap-2 rounded-full border px-3 text-xs transition ${
+            className={`flex h-9 items-center gap-2 rounded-full border px-3 text-sm transition ${
               settings.webSearch
                 ? "border-teal-200/15 bg-teal-200/[0.07] text-teal-100"
                 : "border-white/[0.08] text-slate-400 hover:bg-white/[0.04]"
@@ -561,13 +561,13 @@ const Dashboard = () => {
                 <div className="mb-6 flex size-12 items-center justify-center rounded-2xl border border-teal-200/[0.14] bg-teal-200/[0.07] text-teal-200">
                   <Icon name="sparkle" size={24} />
                 </div>
-                <p className="mb-2 text-sm font-medium text-teal-200">
+                <p className="mb-2 text-base font-medium text-teal-200">
                   Your AI workspace
                 </p>
-                <h1 className="max-w-xl text-4xl font-semibold leading-tight tracking-tight text-slate-100 max-sm:text-3xl">
+                <h1 className="max-w-xl text-5xl font-semibold leading-tight tracking-tight text-slate-100 max-sm:text-4xl">
                   What would you like to explore?
                 </h1>
-                <p className="mt-3 max-w-lg text-sm leading-6 text-slate-500">
+                <p className="mt-3 max-w-lg text-base leading-7 text-slate-500">
                   Ask a question, work through an idea, or start with one of
                   these.
                 </p>
@@ -584,10 +584,10 @@ const Dashboard = () => {
                         size={18}
                         className="mb-5 text-slate-500 transition group-hover:text-teal-200"
                       />
-                      <span className="block text-xs font-medium text-slate-300">
+                      <span className="block text-sm font-medium text-slate-300">
                         {starter.title}
                       </span>
-                      <span className="mt-1 block text-[11px] text-slate-600">
+                      <span className="mt-1 block text-[13px] text-slate-600">
                         Click to get started
                       </span>
                     </button>
@@ -611,12 +611,12 @@ const Dashboard = () => {
                       </span>
                     )}
                     {chatMessage.role === "user" ? (
-                      <div className="max-w-[82%] rounded-3xl rounded-br-lg border border-white/[0.08] bg-[#1a1d23] px-5 py-3.5 text-[14px] leading-6 text-slate-100 max-sm:max-w-[92%]">
+                      <div className="max-w-[82%] rounded-3xl rounded-br-lg border border-white/[0.08] bg-[#1a1d23] px-5 py-3.5 text-base leading-7 text-slate-100 max-sm:max-w-[92%]">
                         {chatMessage.content}
                       </div>
                     ) : (
-                      <div className="max-w-[680px] pt-1 text-[14px] leading-7 text-slate-300">
-                        <p className="mb-2 text-xs font-medium text-slate-500">
+                      <div className="max-w-[680px] pt-1 text-base leading-7 text-slate-300">
+                        <p className="mb-2 text-sm font-medium text-slate-500">
                           Perplexity
                         </p>
                         {chatMessage.content
@@ -638,7 +638,7 @@ const Dashboard = () => {
                     <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-xl border border-teal-200/[0.12] bg-teal-200/[0.06] text-teal-200">
                       <Icon name="sparkle" size={16} />
                     </span>
-                    <div className="flex items-center gap-2 pt-2 text-xs text-slate-500">
+                    <div className="flex items-center gap-2 pt-2 text-sm text-slate-500">
                       <span className="flex gap-1">
                         <span className="size-1 animate-pulse rounded-full bg-teal-200" />
                         <span className="size-1 animate-pulse rounded-full bg-teal-200 [animation-delay:150ms]" />
@@ -676,7 +676,7 @@ const Dashboard = () => {
                   }}
                   placeholder="Ask anything..."
                   rows={2}
-                  className="block max-h-40 min-h-[68px] w-full resize-none bg-transparent px-5 pb-2 pt-4 text-sm leading-6 text-slate-100 outline-none placeholder:text-slate-600"
+                  className="block max-h-4 min-h-[68px] w-full resize-none bg-transparent px-5 pb-2 pt-4 text-base leading-7 text-slate-100 outline-none placeholder:text-slate-600"
                 />
                 <div className="flex items-center justify-between px-3 pb-3">
                   <div className="flex items-center gap-1">
@@ -697,7 +697,7 @@ const Dashboard = () => {
                           webSearch: !current.webSearch,
                         }))
                       }
-                      className={`flex h-8 items-center gap-1.5 rounded-lg px-2 text-[11px] transition ${
+                      className={`flex h-8 items-center gap-1.5 rounded-lg px-2 text-[13px] transition ${
                         settings.webSearch
                           ? "bg-teal-200/[0.07] text-teal-100"
                           : "text-slate-500 hover:bg-white/[0.05] hover:text-slate-300"
@@ -708,7 +708,7 @@ const Dashboard = () => {
                     </button>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-slate-600 max-sm:hidden">
+                    <span className="text-xs text-slate-600 max-sm:hidden">
                       AI can make mistakes
                     </span>
                     <button
@@ -732,7 +732,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </form>
-            <p className="mt-3 text-center text-[10px] text-slate-600">
+            <p className="mt-3 text-center text-xs text-slate-600">
               Perplexity may display inaccurate info, so please double-check
               important details.
             </p>

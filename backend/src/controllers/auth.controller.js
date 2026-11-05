@@ -13,7 +13,7 @@ export const registerController = async (req, res) => {
 
   if (isUserAlreadyExist) {
     return res.status(409).json({
-      message: "User with this username or email already exists",
+      message: `${isUserAlreadyExist.username==username?"username exists":"user with this email already exists"}`,
       success: false,
       error: "User already exists",
     });
@@ -73,12 +73,8 @@ export const verifyEmailController = async (req, res) => {
     user.verified = true;
     await user.save();
 
-    const html = `
-            <h1>Email Verified Successfully!</h1>
-            <p>Login to your account to get started.</p>
-            <a href="http://localhost:3000/api/auth/login">Login here</a>
-        `;
-    res.send(html);
+    
+    res.redirect("http://localhost:5173/verified");
   } catch (error) {
     return res.status(400).json({
       message: "Invalid or expired verification token",
@@ -155,4 +151,72 @@ export const getMeController = async (req, res) => {
     success: true,
     user,
   });
+};
+
+export const forgotPasswordController = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await userModel.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found with this email",
+      success: false,
+      error: "User not found with this email",
+    });
+  }
+
+  // Generate a password reset token
+  const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+
+  // Send the password reset email
+  await sendEmail({
+    to: email,
+    subject: "Password Reset Request",
+    html: `
+            <h1>Password Reset Request</h1>
+            <p>Click the link below to reset your password:</p>
+            <a href="http://localhost:5173/reset-password?token=${resetToken}">Reset Password</a>
+        `,
+  });
+
+  return res.status(200).json({
+    message: "Password reset email sent successfully",
+    success: true,
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  const { token, newPassword } = req.body;
+  
+
+  if (!token) {
+    return res.status(400).json({
+      message: "Reset token is required",
+      success: false,
+      error: "Reset token is required",
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await userModel.findOneAndUpdate(
+      { _id: decoded.id },
+      { password: newPassword },
+      { new: true }
+    )
+
+    return res.status(200).json({
+      message: "Password reset successfully",
+      success: true,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: "Invalid or expired reset token",
+      success: false,
+      error: "Invalid or expired reset token",
+    });
+  }
 };

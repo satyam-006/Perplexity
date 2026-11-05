@@ -1,8 +1,10 @@
 import { Router } from "express";
 import {
+  forgotPasswordController,
   getMeController,
   loginController,
   registerController,
+  resetPasswordController,
   verifyEmailController,
 } from "../controllers/auth.controller.js";
 import {
@@ -46,5 +48,23 @@ authRouter.get("/verify-email", verifyEmailController);
  */
 
 authRouter.get("/get-me", authUser,getMeController);
+
+/**
+ * @route POST /api/auth/forgot-password
+ * @desc Send a password reset email to the user
+ * @access Public
+ * @body { email }
+ */
+
+authRouter.post("/forgot-password", forgotPasswordController);
+
+/**
+ * @route POST /api/auth/reset-password
+ * @desc Reset the user's password
+ * @access Public
+ * @body { token, newPassword }
+ */
+authRouter.post("/reset-password", resetPasswordController);
+
 
 export default authRouter;

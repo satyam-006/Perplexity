@@ -3,14 +3,13 @@ import { Link } from "react-router";
 import { Navigate } from "react-router";
 import { useSelector } from "react-redux";
 
-
 const VerifyEmail = () => {
   const [resendMessage, setResendMessage] = useState("");
 
-  const {user} = useSelector(state=>state.auth)
+  const { user } = useSelector((state) => state.auth);
 
-  if(user){
-    return <Navigate to={"/"} replace/>
+  if (user) {
+    return <Navigate to={"/"} replace />;
   }
 
   return (

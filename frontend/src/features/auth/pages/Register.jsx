@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth";
-import { Navigate,useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
+import Loading from "../components/Loading";
+import { toast } from "../../../utils/toast";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,9 +19,7 @@ const Register = () => {
 
   const { handleRegister } = useAuth();
 
-  const { user,loading } = useSelector((state) => state.auth);
-
-  console.log(user)
+  const { user, loading, error } = useSelector((state) => state.auth);
 
   if (user) {
     return <Navigate to={"/"} replace />;
@@ -34,11 +34,15 @@ const Register = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     await handleRegister(formData);
-    navigate("/verify-email");
+    if (!error) {
+      navigate("/verify-email");
+    }
+
+    toast.error(error);
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -175,7 +179,7 @@ const Register = () => {
                   value={formData.username}
                   onChange={handleChange}
                   placeholder="What should we call you?"
-                  className="h-12 w-full rounded-xl border border-white/[0.09] bg-[#0b0e12] px-4 text-sm text-white outline-none transition placeholder:text-slate-600 hover:border-white/15 focus:border-teal-300/60 focus:ring-4 focus:ring-teal-300/10"
+                  className="h-12 w-full rounded-xl border border-white/[0.09] bg-[#0b0e12] px-4 text-sm text-white outline-none transition-all placeholder:text-slate-600 hover:border-white/15 focus:border-teal-300/60 focus:ring-4 focus:ring-teal-300/10"
                 />
               </div>
 
@@ -195,7 +199,7 @@ const Register = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="you@example.com"
-                  className="h-12 w-full rounded-xl border border-white/[0.09] bg-[#0b0e12] px-4 text-sm text-white outline-none transition placeholder:text-slate-600 hover:border-white/15 focus:border-teal-300/60 focus:ring-4 focus:ring-teal-300/10"
+                  className="h-12 w-full rounded-xl border border-white/[0.09] bg-[#0b0e12] px-4 text-sm text-white outline-none transition-all placeholder:text-slate-600 hover:border-white/15 focus:border-teal-300/60 focus:ring-4 focus:ring-teal-300/10"
                 />
               </div>
 

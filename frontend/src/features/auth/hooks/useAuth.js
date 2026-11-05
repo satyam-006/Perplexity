@@ -1,4 +1,10 @@
-import { register, login, getMe } from "../services/auth.service";
+import {
+  register,
+  login,
+  getMe,
+  forgotPassword,
+  resetPassword,
+} from "../services/auth.service";
 import { useDispatch } from "react-redux";
 import { setUser, setLoading, setError } from "../auth.slice";
 
@@ -11,7 +17,7 @@ export const useAuth = () => {
       const response = await register({ username, email, password });
     } catch (error) {
       dispatch(
-        setError(error.response?.data?.message || "Registration failed"),
+        setError(error.response?.data?.message || "Registration Failed"),
       );
     } finally {
       dispatch(setLoading(false));
@@ -36,9 +42,26 @@ export const useAuth = () => {
       const response = await getMe();
       dispatch(setUser(response.user));
     } catch (error) {
+      // dispatch(
+      //   setError(
+      //     error.response?.data?.message || "Failed to fetch user details",
+      //   ),
+      // );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  const handleForgotPassword = async ({ email }) => {
+    try {
+      dispatch(setLoading(true));
+      const response = await forgotPassword({ email });
+      // Handle success (e.g., show a success message)
+    } catch (error) {
       dispatch(
         setError(
-          error.response?.data?.message || "Failed to fetch user details",
+          error.response?.data?.message ||
+            "Failed to send password reset email",
         ),
       );
     } finally {
@@ -46,5 +69,27 @@ export const useAuth = () => {
     }
   };
 
-  return { handleRegister, handleLogin, handleGetMe };
+  const handleResetPassword = async ({ token, newPassword }) => {
+    try {
+      dispatch(setLoading(true));
+      const response = await resetPassword({ token, newPassword });
+      // Handle success (e.g., show a success message)
+    } catch (error) {
+      dispatch(
+        setError(
+          error.response?.data?.message || "Failed to reset password try again",
+        ),
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  return {
+    handleRegister,
+    handleLogin,
+    handleGetMe,
+    handleForgotPassword,
+    handleResetPassword,
+  };
 };
