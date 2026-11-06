@@ -3,6 +3,7 @@ import {
   forgotPasswordController,
   getMeController,
   loginController,
+  logoutController,
   registerController,
   resetPasswordController,
   verifyEmailController,
@@ -65,6 +66,14 @@ authRouter.post("/forgot-password", forgotPasswordController);
  * @body { token, newPassword }
  */
 authRouter.post("/reset-password", resetPasswordController);
+
+/**
+ * @route GET /api/auth/logout
+ * @desc Logout an user
+ * @access Private 
+ */
+
+authRouter.get("/logout",authUser,logoutController)
 
 
 export default authRouter;

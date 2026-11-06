@@ -333,7 +333,7 @@ const Dashboard = () => {
           <button
             type="button"
             onClick={startNewChat}
-            className="flex h-10 w-full items-center gap-2.5 rounded-xl border border-white/[0.09] bg-white/[0.035] px-3 text-base font-medium text-slate-200 transition hover:border-white/[0.16] hover:bg-white/[0.07] max-md:justify-center max-md:px-0"
+            className="flex h-10 w-full items-center cursor-pointer gap-2.5 rounded-xl border border-white/[0.09] bg-white/[0.035] px-3 text-base font-medium text-slate-200 transition hover:border-white/[0.16] hover:bg-white/[0.07] max-md:justify-center max-md:px-0"
           >
             <Icon name="plus" size={17} />
             <span className="max-md:hidden">New chat</span>
@@ -368,7 +368,7 @@ const Dashboard = () => {
                   setOpenPopover(null);
                 }}
                 title={chat.title}
-                className={`group flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2.5 text-left text-[15px] transition max-md:justify-center max-md:px-0 ${
+                className={`group flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2.5 text-left text-[15px] cursor-pointer transition max-md:justify-center max-md:px-0 ${
                   chat.id === activeChatId
                     ? "bg-white/[0.075] text-slate-100"
                     : "text-slate-400 hover:bg-white/[0.045] hover:text-slate-200"
@@ -485,6 +485,26 @@ const Dashboard = () => {
                   Free plan · Dummy profile
                 </span>
               </div>
+              <button
+                type="button"
+                className="mt-4 flex h-10 w-full items-center gap-2 rounded-xl hover:bg-[#282d35] cursor-pointer px-3 text-left text-sm font-medium text-slate-300 transition-all "
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="size-4"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <path d="m16 17 5-5-5-5" />
+                  <path d="M21 12H9" />
+                </svg>
+                Log out
+              </button>
             </div>
           )}
 
@@ -496,7 +516,7 @@ const Dashboard = () => {
                 setOpenPopover(openPopover === "settings" ? null : "settings");
                 setAccountMenuOpen(false);
               }}
-              className="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-2.5 py-2 text-left text-slate-400 transition hover:bg-white/[0.05] hover:text-slate-200 max-md:justify-center max-md:px-0"
+              className="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-2.5 py-2 text-left text-slate-400 transition cursor-pointer hover:bg-white/[0.05] hover:text-slate-200 max-md:justify-center max-md:px-0"
             >
               <Icon name="settings" size={17} />
               <span className="text-sm max-md:hidden">Settings</span>
@@ -509,7 +529,7 @@ const Dashboard = () => {
                 setAccountMenuOpen(!accountMenuOpen);
                 setOpenPopover(null);
               }}
-              className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.05] text-slate-300 transition hover:border-teal-200/30 hover:text-teal-100"
+              className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.05] text-slate-300 transition hover:border-teal-200/30 hover:text-teal-100"
             >
               <Icon name="user" size={17} />
             </button>
@@ -537,7 +557,7 @@ const Dashboard = () => {
           <button
             type="button"
             onClick={() => setSettings((current) => ({ ...current, webSearch: !current.webSearch }))}
-            className={`flex h-9 items-center gap-2 rounded-full border px-3 text-sm transition ${
+            className={`flex h-9 items-center cursor-pointer gap-2 rounded-full border px-3 text-sm transition ${
               settings.webSearch
                 ? "border-teal-200/15 bg-teal-200/[0.07] text-teal-100"
                 : "border-white/[0.08] text-slate-400 hover:bg-white/[0.04]"
@@ -697,7 +717,7 @@ const Dashboard = () => {
                           webSearch: !current.webSearch,
                         }))
                       }
-                      className={`flex h-8 items-center gap-1.5 rounded-lg px-2 text-[13px] transition ${
+                      className={`flex h-8 items-center cursor-pointer gap-1.5 rounded-lg px-2 text-[13px] transition ${
                         settings.webSearch
                           ? "bg-teal-200/[0.07] text-teal-100"
                           : "text-slate-500 hover:bg-white/[0.05] hover:text-slate-300"
@@ -724,7 +744,7 @@ const Dashboard = () => {
                       type="submit"
                       disabled={!message.trim() || Boolean(pendingReply)}
                       aria-label="Send message"
-                      className="flex size-9 items-center justify-center rounded-xl bg-teal-200 text-[#071411] transition hover:bg-teal-100 disabled:cursor-not-allowed disabled:bg-white/[0.08] disabled:text-slate-600"
+                      className="flex size-9 items-center cursor-pointer justify-center rounded-xl bg-teal-200 text-[#071411] transition hover:bg-teal-100 disabled:cursor-not-allowed disabled:bg-white/[0.08] disabled:text-slate-600"
                     >
                       <Icon name="send" size={17} />
                     </button>

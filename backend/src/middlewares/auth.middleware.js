@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import { redis } from "../config/cache.js";
 
-export const authUser = (req, res, next) => {
+export const authUser = async (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
@@ -10,6 +11,15 @@ export const authUser = (req, res, next) => {
       error: "Token not provided",
     });
   }
+
+  const isTokenBlacklisted = await redis.get(token)
+
+    if (isTokenBlacklisted) {
+        return res.status(401).json({
+            message: "Invalid token"
+        })
+    }
+
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

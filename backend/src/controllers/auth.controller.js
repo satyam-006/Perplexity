@@ -2,6 +2,7 @@ import userModel from "../models/user.model.js";
 import { sendEmail } from "../services/mail.service.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { redis } from "../config/cache.js";
 dotenv.config();
 
 export const registerController = async (req, res) => {
@@ -13,7 +14,7 @@ export const registerController = async (req, res) => {
 
   if (isUserAlreadyExist) {
     return res.status(409).json({
-      message: `${isUserAlreadyExist.username==username?"username exists":"user with this email already exists"}`,
+      message: `${isUserAlreadyExist.username == username ? "username exists" : "user with this email already exists"}`,
       success: false,
       error: "User already exists",
     });
@@ -73,7 +74,6 @@ export const verifyEmailController = async (req, res) => {
     user.verified = true;
     await user.save();
 
-    
     res.redirect("http://localhost:5173/verified");
   } catch (error) {
     return res.status(400).json({
@@ -190,7 +190,6 @@ export const forgotPasswordController = async (req, res) => {
 
 export const resetPasswordController = async (req, res) => {
   const { token, newPassword } = req.body;
-  
 
   if (!token) {
     return res.status(400).json({
@@ -205,8 +204,8 @@ export const resetPasswordController = async (req, res) => {
     const user = await userModel.findOneAndUpdate(
       { _id: decoded.id },
       { password: newPassword },
-      { new: true }
-    )
+      { new: true },
+    );
 
     return res.status(200).json({
       message: "Password reset successfully",
@@ -219,4 +218,17 @@ export const resetPasswordController = async (req, res) => {
       error: "Invalid or expired reset token",
     });
   }
+};
+
+export const logoutController = async (req, res) => {
+  const token = req.cookies.token;
+
+  res.clearCookie("token");
+
+  await redis.set(token, Date.now().toString(), "EX", 60 * 60);
+
+  res.status(200).json({
+    message: "Logout successfully",
+    success: true,
+  });
 };
