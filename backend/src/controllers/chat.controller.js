@@ -1,4 +1,4 @@
-import { generateResponse, generateTitle } from "../services/ai.service.js";
+import { generateResponse, generateChatTitle } from "../services/ai.service.js";
 import chatModel from "../models/chat.model.js";
 import messageModel from "../models/message.model.js";
 
@@ -10,7 +10,7 @@ export async function sendMessage(req, res) {
     title = null;
 
   if (!chatId) {
-    title = await generateTitle(message);
+    title = await generateChatTitle(message);
     chat = await chatModel.create({
       title: title,
       user: req.user.id,
@@ -26,6 +26,8 @@ export async function sendMessage(req, res) {
   const messages = await messageModel.find({ chat: chatId || chat._id });
 
   const result = await generateResponse(messages);
+
+  console.log(result)
 
   const aiMessage = await messageModel.create({
     chat: chatId || chat._id,

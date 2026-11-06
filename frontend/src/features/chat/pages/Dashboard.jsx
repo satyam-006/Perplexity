@@ -1,92 +1,93 @@
 import { useAuth } from "../../auth/hooks/useAuth";
 import { useChat } from "../hooks/useChat";
 import { useEffect, useRef, useState } from "react";
-import {useNavigate} from "react-router"
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
-const initialChats = [
-  {
-    id: "productivity",
-    title: "Build a better morning routine",
-    time: "2m ago",
-    messages: [
-      {
-        role: "user",
-        content: "How can I build a morning routine that actually sticks?",
-      },
-      {
-        role: "assistant",
-        content:
-          "Start smaller than you think you need to. Pick one action that takes less than five minutes, tie it to something you already do, and keep it consistent for a week before adding anything else.\n\nFor example: after you make coffee, spend two minutes writing down your top priority for the day. A routine becomes sustainable when it feels easy to repeat, not impressive to describe.",
-      },
-    ],
-  },
-  {
-    id: "weekend",
-    title: "Weekend trip ideas near the coast",
-    time: "Yesterday",
-    messages: [
-      {
-        role: "user",
-        content: "Suggest a relaxed weekend trip near the coast.",
-      },
-      {
-        role: "assistant",
-        content:
-          "A quiet coastal town with a walkable center makes a great low-key weekend. Look for a place with a scenic trail, a local market, and a few independent cafes so you can keep the itinerary flexible.",
-      },
-    ],
-  },
-  {
-    id: "learning",
-    title: "Learn the basics of photography",
-    time: "Mon",
-    messages: [
-      {
-        role: "user",
-        content: "What should I learn first in photography?",
-      },
-      {
-        role: "assistant",
-        content:
-          "Start with light and composition, then get comfortable with the exposure triangle: aperture, shutter speed, and ISO. Practicing with one setting at a time will help you understand how each choice changes a photo.",
-      },
-    ],
-  },
-  {
-    id: "books",
-    title: "Books for a long flight",
-    time: "Sun",
-    messages: [
-      {
-        role: "user",
-        content: "I need a few engaging books for a long flight.",
-      },
-      {
-        role: "assistant",
-        content:
-          "For a flight, a fast-paced mystery, a thoughtful collection of essays, and an immersive novel make a nicely varied stack. If you tell me what you usually enjoy, I can suggest specific titles.",
-      },
-    ],
-  },
-];
+// const initialChats = [
+//   {
+//     id: "productivity",
+//     title: "Build a better morning routine",
+//     time: "2m ago",
+//     messages: [
+//       {
+//         role: "user",
+//         content: "How can I build a morning routine that actually sticks?",
+//       },
+//       {
+//         role: "assistant",
+//         content:
+//           "Start smaller than you think you need to. Pick one action that takes less than five minutes, tie it to something you already do, and keep it consistent for a week before adding anything else.\n\nFor example: after you make coffee, spend two minutes writing down your top priority for the day. A routine becomes sustainable when it feels easy to repeat, not impressive to describe.",
+//       },
+//     ],
+//   },
+//   {
+//     id: "weekend",
+//     title: "Weekend trip ideas near the coast",
+//     time: "Yesterday",
+//     messages: [
+//       {
+//         role: "user",
+//         content: "Suggest a relaxed weekend trip near the coast.",
+//       },
+//       {
+//         role: "assistant",
+//         content:
+//           "A quiet coastal town with a walkable center makes a great low-key weekend. Look for a place with a scenic trail, a local market, and a few independent cafes so you can keep the itinerary flexible.",
+//       },
+//     ],
+//   },
+//   {
+//     id: "learning",
+//     title: "Learn the basics of photography",
+//     time: "Mon",
+//     messages: [
+//       {
+//         role: "user",
+//         content: "What should I learn first in photography?",
+//       },
+//       {
+//         role: "assistant",
+//         content:
+//           "Start with light and composition, then get comfortable with the exposure triangle: aperture, shutter speed, and ISO. Practicing with one setting at a time will help you understand how each choice changes a photo.",
+//       },
+//     ],
+//   },
+//   {
+//     id: "books",
+//     title: "Books for a long flight",
+//     time: "Sun",
+//     messages: [
+//       {
+//         role: "user",
+//         content: "I need a few engaging books for a long flight.",
+//       },
+//       {
+//         role: "assistant",
+//         content:
+//           "For a flight, a fast-paced mystery, a thoughtful collection of essays, and an immersive novel make a nicely varied stack. If you tell me what you usually enjoy, I can suggest specific titles.",
+//       },
+//     ],
+//   },
+// ];
 
-const starterPrompts = [
-  {
-    icon: "lightbulb",
-    title: "Help me brainstorm",
-    prompt: "Help me brainstorm a few creative ideas for my next project.",
-  },
-  {
-    icon: "code",
-    title: "Write some code",
-    prompt: "Help me write a simple function that ",
-  },
-  {
-    icon: "book",
-    title: "Explain a concept",
-    prompt: "Explain a tricky concept in a simple way.",
-  },
-];
+// const starterPrompts = [
+//   {
+//     icon: "lightbulb",
+//     title: "Help me brainstorm",
+//     prompt: "Help me brainstorm a few creative ideas for my next project.",
+//   },
+//   {
+//     icon: "code",
+//     title: "Write some code",
+//     prompt: "Help me write a simple function that ",
+//   },
+//   {
+//     icon: "book",
+//     title: "Explain a concept",
+//     prompt: "Explain a tricky concept in a simple way.",
+//   },
+// ];
 
 const Icon = ({ name, size = 18, className = "" }) => {
   const icons = {
@@ -182,10 +183,30 @@ const Icon = ({ name, size = 18, className = "" }) => {
   );
 };
 
+const initialChats = [];
+
+const starterPrompts = [
+  {
+    icon: "lightbulb",
+    title: "Help me brainstorm",
+    prompt: "Help me brainstorm a few creative ideas for my next project.",
+  },
+  {
+    icon: "code",
+    title: "Write some code",
+    prompt: "Help me write a simple function that makes a list of tasks easier to prioritize.",
+  },
+  {
+    icon: "book",
+    title: "Explain a concept",
+    prompt: "Explain a tricky concept in a simple way.",
+  },
+];
+
 const Dashboard = () => {
-  const { initializeSocketConnection } = useChat();
-  const [chats, setChats] = useState(initialChats);
-  const [activeChatId, setActiveChatId] = useState(initialChats[0].id);
+  const { initializeSocketConnection, handleSendMessage, handleGetChats, handleOpenChat } = useChat();
+
+  const [activeChatId, setActiveChatId] = useState(initialChats[0]?.id ?? null);
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
   const [pendingReply, setPendingReply] = useState(null);
@@ -197,24 +218,38 @@ const Dashboard = () => {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const endOfMessagesRef = useRef(null);
 
-  const {handleLogout} = useAuth()
-  const navigate=useNavigate()
+  const { chats = {}, currentChatId, loading, error } = useSelector((state) => state.chat);
+  const chatList = Object.values(chats);
+
+  const { handleLogout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     initializeSocketConnection();
-  }, [initializeSocketConnection]);
+    handleGetChats();
+  }, []);
 
-  const activeChat = chats.find((chat) => chat.id === activeChatId);
+  useEffect(() => {
+    if (currentChatId && currentChatId !== activeChatId) {
+      setActiveChatId(currentChatId);
+    }
+
+    if (!currentChatId && chatList.length > 0 && !activeChatId) {
+      setActiveChatId(chatList[0].id);
+    }
+  }, [currentChatId, activeChatId, chatList]);
+
+  const activeChat = activeChatId ? chats[activeChatId] : null;
   const activeMessages = activeChat?.messages || [];
-  const isGenerating = pendingReply?.chatId === activeChatId;
-  const filteredChats = chats.filter((chat) =>
-    chat.title.toLowerCase().includes(search.toLowerCase()),
+  const isGenerating = Boolean(pendingReply) && pendingReply.chatId === activeChatId;
+  const filteredChats = chatList.filter((chat) =>
+    (chat.title || "").toLowerCase().includes(search.toLowerCase()),
   );
 
-  const logoutHandler = async ()=>{
-    await handleLogout()
-    navigate("/login")
-  }
+  const logoutHandler = async () => {
+    await handleLogout();
+    navigate("/login");
+  };
 
   useEffect(() => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -224,22 +259,6 @@ const Dashboard = () => {
     if (!pendingReply) return undefined;
 
     const timer = window.setTimeout(() => {
-      setChats((currentChats) =>
-        currentChats.map((chat) =>
-          chat.id === pendingReply.chatId
-            ? {
-                ...chat,
-                messages: [
-                  ...chat.messages,
-                  {
-                    role: "assistant",
-                    content: `Here are a few thoughts to get you started. For “${pendingReply.prompt}”, try breaking it into a clear goal, a small first step, and one way to measure progress. If you share a little more context, I can tailor the suggestions to what you need.`,
-                  },
-                ],
-              }
-            : chat,
-        ),
-      );
       setPendingReply(null);
     }, 1400);
 
@@ -247,38 +266,21 @@ const Dashboard = () => {
   }, [pendingReply]);
 
   const startNewChat = () => {
-    const newChat = {
-      id: `chat-${Date.now()}`,
-      title: "New conversation",
-      time: "Now",
-      messages: [],
-    };
-    setChats((currentChats) => [newChat, ...currentChats]);
-    setActiveChatId(newChat.id);
+    setActiveChatId(null);
+    setPendingReply(null);
     setMessage("");
     setOpenPopover(null);
   };
 
-  const sendMessage = (event) => {
+  const sendMessage = async (event) => {
     event.preventDefault();
     const content = message.trim();
-    if (!content || pendingReply || !activeChat) return;
+    if (!content || pendingReply) return;
 
-    const chatId = activeChat.id;
-    setChats((currentChats) =>
-      currentChats.map((chat) =>
-        chat.id === chatId
-          ? {
-              ...chat,
-              title: chat.messages.length === 0 ? content : chat.title,
-              time: "Now",
-              messages: [...chat.messages, { role: "user", content }],
-            }
-          : chat,
-      ),
-    );
+    const chatToUse = activeChatId || currentChatId;
+    setPendingReply({ chatId: chatToUse || "new-chat" });
+    await handleSendMessage({ message: content, chatId: chatToUse });
     setMessage("");
-    setPendingReply({ chatId, prompt: content });
   };
 
   const toggleSetting = (settingName) => {
@@ -376,6 +378,7 @@ const Dashboard = () => {
                 onClick={() => {
                   setActiveChatId(chat.id);
                   setOpenPopover(null);
+                  handleOpenChat(chat.id, chats);
                 }}
                 title={chat.title}
                 className={`group flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2.5 text-left text-[15px] cursor-pointer transition max-md:justify-center max-md:px-0 ${
@@ -393,7 +396,12 @@ const Dashboard = () => {
                   {chat.title}
                 </span>
                 <span className="hidden shrink-0 text-xs text-slate-600 group-hover:inline max-md:hidden">
-                  {chat.time}
+                  {chat.lastUpdated
+                    ? new Date(chat.lastUpdated).toLocaleDateString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "Now"}
                 </span>
               </button>
             ))}
@@ -567,7 +575,12 @@ const Dashboard = () => {
           </div>
           <button
             type="button"
-            onClick={() => setSettings((current) => ({ ...current, webSearch: !current.webSearch }))}
+            onClick={() =>
+              setSettings((current) => ({
+                ...current,
+                webSearch: !current.webSearch,
+              }))
+            }
             className={`flex h-9 items-center cursor-pointer gap-2 rounded-full border px-3 text-sm transition ${
               settings.webSearch
                 ? "border-teal-200/15 bg-teal-200/[0.07] text-teal-100"

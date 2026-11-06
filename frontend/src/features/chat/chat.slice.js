@@ -20,6 +20,14 @@ const chatSlice = createSlice({
     },
     addNewMessage: (state, action) => {
       const { chatId, content, role } = action.payload;
+      if (!state.chats[chatId]) {
+        state.chats[chatId] = {
+          id: chatId,
+          title: "New conversation",
+          messages: [],
+          lastUpdated: new Date().toISOString(),
+        };
+      }
       state.chats[chatId].messages.push({ content, role });
     },
     addMessages: (state, action) => {
