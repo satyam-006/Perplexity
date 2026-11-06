@@ -1,5 +1,7 @@
+import { useAuth } from "../../auth/hooks/useAuth";
 import { useChat } from "../hooks/useChat";
 import { useEffect, useRef, useState } from "react";
+import {useNavigate} from "react-router"
 
 const initialChats = [
   {
@@ -195,6 +197,9 @@ const Dashboard = () => {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const endOfMessagesRef = useRef(null);
 
+  const {handleLogout} = useAuth()
+  const navigate=useNavigate()
+
   useEffect(() => {
     initializeSocketConnection();
   }, [initializeSocketConnection]);
@@ -205,6 +210,11 @@ const Dashboard = () => {
   const filteredChats = chats.filter((chat) =>
     chat.title.toLowerCase().includes(search.toLowerCase()),
   );
+
+  const logoutHandler = async ()=>{
+    await handleLogout()
+    navigate("/login")
+  }
 
   useEffect(() => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -486,6 +496,7 @@ const Dashboard = () => {
                 </span>
               </div>
               <button
+                onClick={logoutHandler}
                 type="button"
                 className="mt-4 flex h-10 w-full items-center gap-2 rounded-xl hover:bg-[#282d35] cursor-pointer px-3 text-left text-sm font-medium text-slate-300 transition-all "
               >

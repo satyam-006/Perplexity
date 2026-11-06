@@ -4,6 +4,7 @@ import {
   getMe,
   forgotPassword,
   resetPassword,
+  logout,
 } from "../services/auth.service";
 import { useDispatch } from "react-redux";
 import { setUser, setLoading, setError } from "../auth.slice";
@@ -85,11 +86,25 @@ export const useAuth = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      dispatch(setLoading(true));
+      const response = await logout();
+      dispatch(setUser(null))
+      dispatch(setError(null))
+    } catch (error) {
+      dispatch(setError(error.response?.data?.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   return {
     handleRegister,
     handleLogin,
     handleGetMe,
     handleForgotPassword,
     handleResetPassword,
+    handleLogout,
   };
 };
